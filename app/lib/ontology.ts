@@ -54,19 +54,9 @@ function localName(value?: string) {
   return value.replace(/^#/, '').split(/[\/#]/).pop() || value;
 }
 
-type RegexBlock = { attributes: string; body: string };
-
-function blocks(xml: string, tag: string): RegexBlock[] {
+function blocks(xml: string, tag: string) {
   const expression = new RegExp(`<owl:${tag}\\b([\\s\\S]*?)>([\\s\\S]*?)<\\/owl:${tag}>`, 'g');
-  const results: RegexBlock[] = [];
-  let match = expression.exec(xml);
-
-  while (match !== null) {
-    results.push({ attributes: match[1], body: match[2] });
-    match = expression.exec(xml);
-  }
-
-  return results;
+  return [...xml.matchAll(expression)].map((match) => ({ attributes: match[1], body: match[2] }));
 }
 
 function attribute(source: string, name: string) {
@@ -74,7 +64,7 @@ function attribute(source: string, name: string) {
 }
 
 function label(body: string, fallback: string) {
-  return body.match(/<rdfs:label(?:\s[^>]*)?>([\s\S]*?)<\/rdfs:label>/)?.[1]?.trim() || fallback;
+  return body.match(/<rdfs:label(?:\s[^>]*)?>(.*?)<\/rdfs:label>/s)?.[1]?.trim() || fallback;
 }
 
 function resource(body: string, tag: string) {
@@ -109,20 +99,12 @@ export function parseOntology(xml: string): OntologySummary {
   const individuals = blocks(xml, 'NamedIndividual').map(({ attributes, body }) => {
     const id = localName(attribute(attributes, 'rdf:about'));
     const type = resource(body, 'rdf:type');
-    const fieldExpression = /<([a-zA-Z][\w-]*)(?:\s+rdf:datatype="[^"]+")?(?:\s+rdf:resource="([^"]+)")?>([\s\S]*?)<\/\1>|<([a-zA-Z][\w-]*)\s+rdf:resource="([^"]+)"\/>/g;
-    const fields: Array<{ name: string; value: string }> = [];
-    let fieldMatch = fieldExpression.exec(body);
-
-    while (fieldMatch !== null) {
-      const name = fieldMatch[1] || fieldMatch[4];
-      if (name !== 'rdf:type') {
-        fields.push({
-          name,
-          value: localName(fieldMatch[2] || fieldMatch[5] || fieldMatch[3]?.trim())
-        });
-      }
-      fieldMatch = fieldExpression.exec(body);
-    }
+    const fields = [...body.matchAll(/<([a-zA-Z][\w-]*)(?:\s+rdf:datatype="[^"]+")?(?:\s+rdf:resource="([^"]+)")?>(.*?)<\/\1>|<([a-zA-Z][\w-]*)\s+rdf:resource="([^"]+)"\/>/gs)]
+      .map((match) => ({
+        name: match[1] || match[4],
+        value: localName(match[2] || match[5] || match[3]?.trim())
+      }))
+      .filter((field) => field.name !== 'rdf:type');
 
     return { id, type, fields };
   });
