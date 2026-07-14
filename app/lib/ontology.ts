@@ -56,7 +56,7 @@ function localName(value?: string) {
 
 function blocks(xml: string, tag: string) {
   const expression = new RegExp(`<owl:${tag}\\b([\\s\\S]*?)>([\\s\\S]*?)<\\/owl:${tag}>`, 'g');
-  return Array.from(xml.matchAll(expression), (match) => ({ attributes: match[1], body: match[2] }));
+  return [...xml.matchAll(expression)].map((match) => ({ attributes: match[1], body: match[2] }));
 }
 
 function attribute(source: string, name: string) {
@@ -99,7 +99,7 @@ export function parseOntology(xml: string): OntologySummary {
   const individuals = blocks(xml, 'NamedIndividual').map(({ attributes, body }) => {
     const id = localName(attribute(attributes, 'rdf:about'));
     const type = resource(body, 'rdf:type');
-    const fields = Array.from(body.matchAll(/<([a-zA-Z][\w-]*)(?:\s+rdf:datatype="[^"]+")?(?:\s+rdf:resource="([^"]+)")?>(.*?)<\/\1>|<([a-zA-Z][\w-]*)\s+rdf:resource="([^"]+)"\/>/gs))
+    const fields = [...body.matchAll(/<([a-zA-Z][\w-]*)(?:\s+rdf:datatype="[^"]+")?(?:\s+rdf:resource="([^"]+)")?>(.*?)<\/\1>|<([a-zA-Z][\w-]*)\s+rdf:resource="([^"]+)"\/>/gs)]
       .map((match) => ({
         name: match[1] || match[4],
         value: localName(match[2] || match[5] || match[3]?.trim())
