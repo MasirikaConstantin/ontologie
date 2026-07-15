@@ -49,10 +49,10 @@ export default async function OntologyDocumentationPage() {
             Une lecture structurée du modèle : objectif, classes, relations, propriétés de données et exemples concrets.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button size="lg" className="h-11 bg-amber-300 px-5 text-emerald-950 hover:bg-amber-200" render={<Link href="/" />}>
+            <Button size="lg" nativeButton={false} className="h-11 bg-amber-300 px-5 text-emerald-950 hover:bg-amber-200" render={<Link href="/" />}>
               <ArrowLeft data-icon="inline-start" /> Tableau de bord
             </Button>
-            <Button size="lg" variant="outline" className="h-11 border-white/25 bg-white/5 px-5 text-white hover:bg-white/10 hover:text-white" render={<Link href="/api/ontology/file" />}>
+            <Button size="lg" variant="outline" nativeButton={false} className="h-11 border-white/25 bg-white/5 px-5 text-white hover:bg-white/10 hover:text-white" render={<Link href="/api/ontology/file" />}>
               <Download data-icon="inline-start" /> Télécharger OWL
             </Button>
           </div>
@@ -76,7 +76,7 @@ export default async function OntologyDocumentationPage() {
             <CardContent>
               <nav className="flex gap-2 overflow-x-auto pb-1 lg:grid" aria-label="Plan de la documentation">
                 {sections.map(([href, label]) => (
-                  <Button key={href} variant="ghost" size="sm" className="shrink-0 justify-start" render={<a href={`#${href}`} />}>
+                  <Button key={href} variant="ghost" size="sm" nativeButton={false} className="shrink-0 justify-start" render={<a href={`#${href}`} />}>
                     {label}
                   </Button>
                 ))}

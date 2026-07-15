@@ -57,13 +57,13 @@ export default async function Home() {
             Explorez l’ontologie de gestion du personnel, ses relations et ses données depuis une interface claire, reliée directement au fichier OWL.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button size="lg" className="h-11 bg-amber-300 px-5 text-emerald-950 hover:bg-amber-200" render={<Link href="/ontologie" />}>
+            <Button size="lg" nativeButton={false} className="h-11 bg-amber-300 px-5 text-emerald-950 hover:bg-amber-200" render={<Link href="/ontologie" />}>
               Explorer l’ontologie <ArrowRight data-icon="inline-end" />
             </Button>
-            <Button size="lg" variant="outline" className="h-11 border-white/25 bg-white/5 px-5 text-white hover:bg-white/10 hover:text-white" render={<Link href="/api/ontology" />}>
+            <Button size="lg" variant="outline" nativeButton={false} className="h-11 border-white/25 bg-white/5 px-5 text-white hover:bg-white/10 hover:text-white" render={<Link href="/api/ontology" />}>
               <Braces data-icon="inline-start" /> API JSON
             </Button>
-            <Button size="lg" variant="ghost" className="h-11 px-5 text-emerald-50 hover:bg-white/10 hover:text-white" render={<Link href="/api/ontology/file" />}>
+            <Button size="lg" variant="ghost" nativeButton={false} className="h-11 px-5 text-emerald-50 hover:bg-white/10 hover:text-white" render={<Link href="/api/ontology/file" />}>
               <Download data-icon="inline-start" /> Télécharger OWL
             </Button>
           </div>

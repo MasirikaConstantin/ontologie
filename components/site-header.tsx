@@ -32,7 +32,7 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Navigation principale">
           {navigation.map(({ href, label, icon: Icon }) => (
-            <Button key={href} variant="ghost" render={<Link href={href} />}>
+            <Button key={href} variant="ghost" nativeButton={false} render={<Link href={href} />}>
               {Icon ? <Icon data-icon="inline-start" /> : null}
               {label}
             </Button>
@@ -55,7 +55,7 @@ export function SiteHeader() {
             </SheetHeader>
             <nav className="grid gap-2 px-4" aria-label="Navigation mobile">
               {navigation.map(({ href, label, icon: Icon }) => (
-                <Button key={href} variant="ghost" className="h-11 justify-start px-3" render={<Link href={href} />}>
+                <Button key={href} variant="ghost" nativeButton={false} className="h-11 justify-start px-3" render={<Link href={href} />}>
                   {Icon ? <Icon data-icon="inline-start" /> : <Network data-icon="inline-start" />}
                   {label}
                 </Button>
